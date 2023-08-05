@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: python-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: python-app
+  template:
+    metadata:
+      labels:
+        app: python-app
+    spec:
+      containers:
+        - name: sprints
+          image: nourmohamed99/sprints-project:latest
+          env:
+            - name: DB_USER
+              value: "root"
+            - name: DB_PASSWORD
+              value: "MyPassword@123"
+            - name: DB_HOST
+              value: "db"
+            - name: DB_PORT
+              value: "3306"
+            - name: DB_NAME
+              value: "BucketList"  
+          ports:
+            - containerPort: 5002
+          command: ["python", "app.py"]
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 5002
+            initialDelaySeconds: 5
+            periodSeconds: 5
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 5002
+            initialDelaySeconds: 5
+            periodSeconds: 5
+

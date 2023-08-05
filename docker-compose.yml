@@ -1,0 +1,38 @@
+version: '3.3'
+services:
+  db:
+    image: mysql:latest
+    container_name: docker_file-db-1
+    environment:
+      TZ: "UTC" 
+      MYSQL_ROOT_PASSWORD: MyPassword@123
+      MYSQL_DATABASE: BucketList
+      # MYSQL_ROOT_HOST: '%'
+    volumes:
+      - ./MySQL_Queries:/docker-entrypoint-initdb.d
+    command: --default-authentication-plugin=caching_sha2_password
+    ports:
+      - "3306:3306"
+
+  web:
+    networks:
+      - default
+    build: .
+    container_name: sprints
+    image: sprints:latest
+    depends_on:
+      - db
+    environment:
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_NAME: BucketList
+      DB_USER: root
+      DB_PASSWORD: MyPassword@123
+    ports:
+      - "5002:5002"
+    restart: on-failure
+    command: python app.py
+
+networks:
+  default:
+    driver: bridge

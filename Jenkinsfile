@@ -6,8 +6,10 @@ pipeline {
             steps {
                 script {
                     // Build Docker image from the Dockerfile
-                    docker.withRegistry('https://hub.docker.com/', 'DockerHub-Cred') {
-                        def customImage = docker.build('docker push mohabalinassar/mysql-ython:last', '.')
+                    def customImage = docker.build('mohabalinassar/mysql-ython:last', '.')
+                    
+                    // Push the Docker image to Docker Hub
+                    docker.withRegistry('https://index.docker.io/v1/', 'DockerHub-Cred') {
                         customImage.push()
                     }
                 }

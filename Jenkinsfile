@@ -1,5 +1,12 @@
 pipeline {
-    agent any
+    agent {
+        docker {
+            // Use the Jenkins Docker image that has Docker CLI installed
+            image 'jenkins/jenkins:lts'
+            // Mount the Docker socket from the host into the Jenkins container
+            args '-v /var/run/docker.sock:/var/run/docker.sock'
+        }
+    }
 
     stages {
         stage('Build Docker Image') {
@@ -16,14 +23,8 @@ pipeline {
             }
         }
 
-        stage('Deploy with docker-compose') {
-            steps {
-                // Install docker-compose in the Jenkins agent (if not already installed)
-                sh "apt update && apt install -y docker-compose"
+        // Add more stages for testing, deployment, etc.
+        // ...
 
-                // Run docker-compose to deploy the stack
-                sh "docker-compose up -d"
-            }
-        }
     }
 }

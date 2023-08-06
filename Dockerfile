@@ -4,6 +4,9 @@ FROM ubuntu:20.04
 # Install required dependencies for Jenkins
 RUN apt-get update && apt-get install -y openjdk-11-jdk
 
+# Install Docker CLI
+RUN apt-get install -y docker.io
+
 # Install Jenkins
 RUN wget -q -O - https://pkg.jenkins.io/debian/jenkins.io.key | apt-key add -
 RUN sh -c 'echo deb http://pkg.jenkins.io/debian-stable binary/ > /etc/apt/sources.list.d/jenkins.list'

@@ -1,30 +1,20 @@
 pipeline {
-    agent {
-        docker {
-            // Use the Jenkins Docker image that has Docker CLI installed
-            image 'jenkins/jenkins:lts'
-            // Mount the Docker socket from the host into the Jenkins container
-            args '-v /var/run/docker.sock:/var/run/docker.sock'
-        }
-    }
+    agent any
 
     stages {
         stage('Build Docker Image') {
             steps {
-                script {
-                    // Build Docker image from the Dockerfile
-                    def customImage = docker.build('mohabalinassar/mysql-ython:last', '.')
-                    
-                    // Push the Docker image to Docker Hub
-                    docker.withRegistry('https://index.docker.io/v1/', 'DockerHub-Cred') {
-                        customImage.push()
-                    }
-                }
+                // Your Docker build steps here using the Dockerfile
+                sh 'docker build -t mohabalinasasr/mysql-ython:last .'
             }
         }
 
-        // Add more stages for testing, deployment, etc.
-        // ...
-
+        stage('Push to Docker Hub') {
+            steps {
+                withDockerRegistry(credentialsId: 'DockerHub-Cred', url: '') {
+                    sh 'docker push your-docker-hub-username/mysql-ython:last'
+                }
+            }
+        }
     }
 }

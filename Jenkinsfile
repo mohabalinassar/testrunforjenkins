@@ -12,7 +12,7 @@ pipeline {
         stage('Push to Docker Hub') {
             steps {
                 withDockerRegistry(credentialsId: 'DockerHub-Cred', url: '') {
-                    sh 'docker push your-docker-hub-username/mysql-ython:last'
+                    sh 'docker mohabalinassar/mysql-ython:last'
                 }
             }
         }

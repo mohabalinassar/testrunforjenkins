@@ -22,14 +22,13 @@ pipeline {
                 AWS_DEFAULT_REGION = 'us-east-1'
             }
             steps {
-                 script {
-                    def awsCli = tool 'AWS CLI' // Use the correct tool name configured in Jenkins
-                    sh "docker tag mohabalinassar/mysql-ython:last ${aws_account_id}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/test-repo:latest"
-                    withAWS(region: 'your_aws_region_here', tool: awsCli) {
-                        sh "aws ecr get-login-password | docker login --username AWS --password-stdin ${aws_account_id}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com"
-                        sh "docker push ${aws_account_id}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/test-repo:latest"
-                    }
+                steps {
+                withAWS(credentials: 'AWS-Cred', region: AWS_DEFAULT_REGION) {
+                    sh "aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | docker login --username AWS --password-stdin ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com"
+                    sh "docker tag mysql-ython:latest ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${ECR_REPOSITORY}:${IMAGE_TAG}"
+                    sh "docker push ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${ECR_REPOSITORY}:${IMAGE_TAG}"
                 }
+            }
             }
         }
     }

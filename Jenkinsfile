@@ -5,7 +5,7 @@ pipeline {
         AWS_DEFAULT_REGION = 'us-east-1'
         ECR_REPOSITORY = 'ecr-repo'
         IMAGE_TAG = 'latest'
-        AWS_ACCOUNT_ID = sh(returnStdout: true, script: 'aws sts get-caller-identity --query "Account" --output text').trim()
+        //AWS_ACCOUNT_ID = sh(returnStdout: true, script: 'aws sts get-caller-identity --query "Account" --output text').trim()
     }
     
     stages {

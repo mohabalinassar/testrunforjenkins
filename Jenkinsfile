@@ -12,9 +12,10 @@ pipeline {
             steps {
                 // Your Docker build steps here using the Dockerfile
                 sh 'docker build -t final-sprints-project .'
+                sh 'docker mohabalinassar/final-sprints-project:latest'
             }
         }
-
+        
         stage('Push to ECR') {
             steps {
                 withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'AWS-Cred']]) {
